@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Devices - Product FAQ Chatbot & NLP Debugger</title>
+    <!-- Google Fonts: Orbitron for futuristic titles, Inter for readability -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- TOP DECK: Futuristic Brand Bar -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-solid fa-mobile logo-icon"></i>
+                <span class="logo-text">MOBILE <span class="accent-text">DEVICES</span></span>
+            </div>
+            <div class="header-status">
+                <span class="status-dot pulsing"></span>
+                <span class="status-text">PRODUCT SUPPORT SYSTEM ONLINE</span>
+            </div>
+        </header>
+
+        <!-- MAIN DECK: Grid layout -->
+        <main class="app-body">
+            
+            <!-- COLUMN 1: FAQ Directory & Topics -->
+            <section class="sidebar-panel">
+                <div class="panel-header">
+                    <i class="fa-solid fa-list-check panel-icon"></i>
+                    <h2>FAQ Directory</h2>
+                </div>
+                <div class="category-filters">
+                    <button class="filter-btn active" data-category="all">All Topics</button>
+                    <button class="filter-btn" data-category="Pricing & Plans">Pricing</button>
+                    <button class="filter-btn" data-category="Features & Specs">Features</button>
+                    <button class="filter-btn" data-category="Technical Support">Support</button>
+                    <button class="filter-btn" data-category="Sustainability">Sustainability</button>
+                </div>
+                <div class="faq-list" id="faqDirectoryList">
+                    <div class="directory-loader">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i> Loading FAQ database...
+                    </div>
+                </div>
+            </section>
+
+            <!-- COLUMN 2: Chat Interface -->
+            <section class="chat-panel">
+                <div class="panel-header">
+                    <div class="bot-avatar-large">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bot-info">
+                        <h2>Product Support AI</h2>
+                        <span class="bot-subtext">Smart FAQ matching active</span>
+                    </div>
+                    <button id="clearChatBtn" title="Reset Conversation" class="action-icon-btn">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Dynamic messages -->
+                </div>
+
+                <div class="chat-input-area">
+                    <form id="chatForm">
+                        <input type="text" id="userInput" placeholder="Ask about phones, pricing, features, support..." autocomplete="off" required>
+                        <button type="submit" id="sendBtn">
+                            <span>Send</span>
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    <div class="quick-suggests" id="quickSuggestContainer">
+                        <!-- Quick questions rendered here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- COLUMN 3: NLP Debugger Console -->
+            <section class="debug-panel" id="debugPanel">
+                <div class="panel-header">
+                    <i class="fa-solid fa-terminal panel-icon"></i>
+                    <h2>NLP Debug Console</h2>
+                </div>
+
+                <div class="debug-content">
+                    <!-- Engine Metadata -->
+                    <div class="debug-card engine-card">
+                        <div class="debug-card-header">
+                            <span class="card-label">Active Engine</span>
+                            <span class="engine-badge" id="debugEngine">Idle (Waiting for input)</span>
+                        </div>
+                    </div>
+
+                    <!-- Preprocessing Pipeline Card -->
+                    <div class="debug-card">
+                        <h3><i class="fa-solid fa-filter"></i> Text Preprocessing</h3>
+                        <div class="pipeline-step">
+                            <div class="step-label">1. Raw Query</div>
+                            <div class="step-value" id="stepRaw">-</div>
+                        </div>
+                        <div class="pipeline-step">
+                            <div class="step-label">2. Tokenization <span class="step-desc">(split and lowercase)</span></div>
+                            <div class="step-value tokens-list" id="stepTokens">-</div>
+                        </div>
+                        <div class="pipeline-step">
+                            <div class="step-label">3. Stopwords Removed <span class="step-desc">(filter common words)</span></div>
+                            <div class="step-value tokens-list" id="stepClean">-</div>
+                        </div>
+                        <div class="pipeline-step">
+                            <div class="step-label">4. Stemmed Tokens <span class="step-desc">(word endings standardisation)</span></div>
+                            <div class="step-value tokens-list" id="stepStemmed">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Similarity Rankings Card -->
+                    <div class="debug-card matches-card">
+                        <h3><i class="fa-solid fa-chart-bar"></i> Cosine Similarity Scores</h3>
+                        <div class="scores-table-container">
+                            <table class="scores-table">
+                                <thead>
+                                    <tr>
+                                        <th>FAQ Question Candidate</th>
+                                        <th class="score-col">Cosine Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="debugScoresBody">
+                                    <tr>
+                                        <td colspan="2" class="empty-table">Submit a query to inspect cosine calculations</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="threshold-note">
+                            <span class="threshold-marker"></span> Match Threshold: <strong>0.20</strong>
+                        </div>
+                    </div>
+
+                    <!-- Math Breakdown Card -->
+                    <div class="debug-card math-card">
+                        <h3><i class="fa-solid fa-square-root-variable"></i> TF-IDF Cosine Formula</h3>
+                        <div class="formula-box">
+                            $$\text{Cosine Similarity} = \frac{\mathbf{A} \cdot \mathbf{B}}{\|\mathbf{A}\| \|\mathbf{B}\|} = \frac{\sum_{i=1}^{n} A_i B_i}{\sqrt{\sum_{i=1}^{n} A_i^2} \sqrt{\sum_{i=1}^{n} B_i^2}}$$
+                        </div>
+                        <div class="vector-details" id="vectorDetails">
+                            Submit a question to see vector dot product calculations.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COLUMN 4: AI Charts & Analytics -->
+            <section class="charts-panel">
+                <div class="panel-header">
+                    <i class="fa-solid fa-chart-line panel-icon"></i>
+                    <h2>Analytics & Insights</h2>
+                </div>
+
+                <div class="charts-container">
+                    <!-- FAQ Distribution Chart -->
+                    <div class="chart-card">
+                        <h3><i class="fa-solid fa-pie-chart"></i> FAQ Distribution by Category</h3>
+                        <canvas id="faqCategoryChart"></canvas>
+                    </div>
+
+                    <!-- Phone Specs Comparison Chart -->
+                    <div class="chart-card">
+                        <h3><i class="fa-solid fa-gauge"></i> Phone Specifications</h3>
+                        <canvas id="specsChart"></canvas>
+                    </div>
+
+                    <!-- Price Comparison Chart -->
+                    <div class="chart-card">
+                        <h3><i class="fa-solid fa-dollar-sign"></i> Phone Models & Pricing</h3>
+                        <canvas id="priceChart"></canvas>
+                    </div>
+
+                    <!-- Performance Metrics Chart -->
+                    <div class="chart-card">
+                        <h3><i class="fa-solid fa-bolt"></i> Performance Benchmarks</h3>
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+
+                    <!-- Similarity Scores Chart -->
+                    <div class="chart-card">
+                        <h3><i class="fa-solid fa-chart-bar"></i> Recent Query Matches</h3>
+                        <canvas id="similarityChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Load Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Load KaTeX for Math expression rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+    <!-- App Scripts -->
+    <script src="charts.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
